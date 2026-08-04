@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c5nwc78d6med"
-path="res://.godot/imported/spr_kris_plat_slash_air_2.png-d42fc4c938f0ab285fe33e679dc1f468.ctex"
+uid="uid://d38xgdgb5esxu"
+path="res://.godot/imported/kris_land_2.png-d7bc96e8407e9cbea5dbaccaca0b82d8.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/platformer/spr_kris_plat_slash_air_2.png"
-dest_files=["res://.godot/imported/spr_kris_plat_slash_air_2.png-d42fc4c938f0ab285fe33e679dc1f468.ctex"]
+source_file="res://assets/platformer/kris_land_2.png"
+dest_files=["res://.godot/imported/kris_land_2.png-d7bc96e8407e9cbea5dbaccaca0b82d8.ctex"]
 
 [params]
 

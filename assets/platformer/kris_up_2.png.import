@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dtwteoumh02px"
-path="res://.godot/imported/spr_kris_plat_idle_1.png-d0c553644b2d2bd01ee66f2fae5db488.ctex"
+uid="uid://yvg3w54nv3do"
+path="res://.godot/imported/kris_up_2.png-896210fca2aed1b709b9dcab3e17a5ad.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/platformer/spr_kris_plat_idle_1.png"
-dest_files=["res://.godot/imported/spr_kris_plat_idle_1.png-d0c553644b2d2bd01ee66f2fae5db488.ctex"]
+source_file="res://assets/platformer/kris_up_2.png"
+dest_files=["res://.godot/imported/kris_up_2.png-896210fca2aed1b709b9dcab3e17a5ad.ctex"]
 
 [params]
 

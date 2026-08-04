@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://d3ud3aig4dcam"
-path="res://.godot/imported/spr_kris_jump_up_1.png-af8f8b3a4772e58ebac3629f15f70f5f.ctex"
+uid="uid://ceyrer543ga08"
+path="res://.godot/imported/13.png-f82523c794a1dfb88b759c40b776a48e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/platformer/spr_kris_jump_up_1.png"
-dest_files=["res://.godot/imported/spr_kris_jump_up_1.png-af8f8b3a4772e58ebac3629f15f70f5f.ctex"]
+source_file="res://assets/platformer/slash_air/13.png"
+dest_files=["res://.godot/imported/13.png-f82523c794a1dfb88b759c40b776a48e.ctex"]
 
 [params]
 
