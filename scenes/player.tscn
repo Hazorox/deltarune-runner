@@ -1,0 +1,254 @@
+[gd_scene format=3 uid="uid://begdy721mu54m"]
+
+[ext_resource type="Texture2D" uid="uid://bipnk8l1vvce3" path="res://assets/platformer/kris_down_1.png" id="1_31cv2"]
+[ext_resource type="Texture2D" uid="uid://17wwmwtluaxt" path="res://assets/platformer/kris_down_2.png" id="2_pf23h"]
+[ext_resource type="Texture2D" uid="uid://conbkp43rng4s" path="res://assets/platformer/kris_down_3.png" id="3_dt7fs"]
+[ext_resource type="Texture2D" uid="uid://bii1ee7gld8nk" path="res://assets/platformer/kris_idle_1.png" id="4_wqfne"]
+[ext_resource type="Texture2D" uid="uid://b8numbk2iqd1y" path="res://assets/platformer/kris_idle_2.png" id="5_wnwbv"]
+[ext_resource type="Texture2D" uid="uid://c6sr1gr0xfjbe" path="res://assets/platformer/kris_idle_3.png" id="6_gl8cc"]
+[ext_resource type="Texture2D" uid="uid://cpv3pitsp20sa" path="res://assets/platformer/kris_land_1.png" id="7_487ah"]
+[ext_resource type="Texture2D" uid="uid://d38xgdgb5esxu" path="res://assets/platformer/kris_land_2.png" id="8_md1ol"]
+[ext_resource type="Texture2D" uid="uid://dllkwmpe7n4wm" path="res://assets/platformer/spr_kris_plat_run_0.png" id="9_bj30b"]
+[ext_resource type="Texture2D" uid="uid://rh8xcfqbys55" path="res://assets/platformer/spr_kris_plat_run_1.png" id="10_jc3p3"]
+[ext_resource type="Texture2D" uid="uid://cf8f8tufu1js6" path="res://assets/platformer/spr_kris_plat_run_2.png" id="11_hax0n"]
+[ext_resource type="Texture2D" uid="uid://bmis1cstc58x" path="res://assets/platformer/spr_kris_plat_run_3.png" id="12_t4otl"]
+[ext_resource type="Texture2D" uid="uid://btvc3rxeubdck" path="res://assets/platformer/spr_kris_plat_run_4.png" id="13_j2b1d"]
+[ext_resource type="Texture2D" uid="uid://bf7l3gr3p4ypn" path="res://assets/platformer/spr_kris_plat_run_5.png" id="14_cs1tg"]
+[ext_resource type="Texture2D" uid="uid://c3ewa44y76k1v" path="res://assets/platformer/slash_air/9.png" id="15_2dvfe"]
+[ext_resource type="Texture2D" uid="uid://vdhhxktw0oim" path="res://assets/platformer/slash_air/10.png" id="16_giy8y"]
+[ext_resource type="Texture2D" uid="uid://bkupbvxakplax" path="res://assets/platformer/slash_air/11.png" id="17_fdfoy"]
+[ext_resource type="Texture2D" uid="uid://cgv7g2j3gyi68" path="res://assets/platformer/slash_air/12.png" id="18_hhpqf"]
+[ext_resource type="Texture2D" uid="uid://ceyrer543ga08" path="res://assets/platformer/slash_air/13.png" id="19_g5jhy"]
+[ext_resource type="Texture2D" uid="uid://dwl46frq08v4a" path="res://assets/platformer/slash_air/14.png" id="20_holxr"]
+[ext_resource type="Texture2D" uid="uid://d2vhh00maxg5c" path="res://assets/platformer/slash_air/15.png" id="21_mx1m4"]
+[ext_resource type="Texture2D" uid="uid://7hgwj5wex41q" path="res://assets/platformer/slash_air/16.png" id="22_4gjji"]
+[ext_resource type="Texture2D" uid="uid://cuno47nqpfdoe" path="res://assets/platformer/slash_air/17.png" id="23_u2ulf"]
+[ext_resource type="Texture2D" uid="uid://ivk46fnwkuyb" path="res://assets/platformer/spr_kris_plat_turn_0.png" id="24_6e8lb"]
+[ext_resource type="Texture2D" uid="uid://cyxu06kx3gu1p" path="res://assets/platformer/kris_up_1.png" id="25_2gdjj"]
+[ext_resource type="Texture2D" uid="uid://yvg3w54nv3do" path="res://assets/platformer/kris_up_2.png" id="26_sc3ue"]
+[ext_resource type="Texture2D" uid="uid://bimv5nj0u7oax" path="res://assets/platformer/kris_up_3.png" id="27_lxlsd"]
+[ext_resource type="Texture2D" uid="uid://dcbhpvwry55wj" path="res://assets/spr_sunrise_flowerlayer_dark_0.png" id="28_pf23h"]
+
+[sub_resource type="GDScript" id="GDScript_0hvcy"]
+resource_name = "player script"
+script/source = "extends CharacterBody2D
+
+
+const SPEED = 350.0
+const JUMP_VELOCITY = -600.0
+
+@onready var sprite = $sprite
+@onready var collision = $collision
+
+
+
+func _physics_process(delta: float) -> void:
+	if Input.is_action_just_pressed(\"accept\") and not sprite.get_meta(\"slashing\", false) and not is_on_floor():
+		sprite.set_meta(\"slashing\", true)
+		sprite.play(\"slash_air\")
+	# Add the gravity.
+	if not is_on_floor():
+		velocity += get_gravity() * delta
+	# Handle jump.
+	if Input.is_action_just_pressed(\"jump\") and is_on_floor():
+		velocity.y = JUMP_VELOCITY
+	# Get the input direction and handle the movement/deceleration.
+	# As good practice, you should replace UI actions with custom gameplay actions.
+	var direction := Input.get_axis(\"left\", \"right\")
+	
+	# Flip direction
+	if direction:
+		if direction==1.0:
+			sprite.flip_h=false
+		elif direction==-1.0:
+			sprite.flip_h=true
+		velocity.x = direction * SPEED
+	else:
+		velocity.x = move_toward(velocity.x, 0, SPEED)
+	
+	# Change frames
+	if not sprite.get_meta(\"slashing\",false):
+		if velocity.y>0:
+			sprite.play(\"down\")
+		elif velocity.y<0:
+			sprite.play(\"up\")
+		elif velocity.x!=0:
+			sprite.play(\"run\")
+		else:
+			sprite.play(\"idle\")
+	move_and_slide()
+
+# Auto-configure for the collision size ( due to differences between each frameGroup )
+func _on_sprite_frame_changed()->void:
+	if sprite.animation == \"slash_air\":
+		collision.shape.radius=16
+	else:
+		collision.shape.radius=10
+
+
+func _on_sprite_animation_finished() -> void:
+	if sprite.animation == \"slash_air\":
+		sprite.set_meta(\"slashing\",false)
+"
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_nfrx5"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_31cv2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_pf23h")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_dt7fs")
+}],
+"loop": 1,
+"name": &"down",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_wqfne")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_wnwbv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_gl8cc")
+}],
+"loop": 1,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("7_487ah")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_md1ol")
+}],
+"loop": 1,
+"name": &"land",
+"speed": 2.0
+}, {
+"frames": [],
+"loop": 1,
+"name": &"new_animation",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("9_bj30b")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_jc3p3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_hax0n")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_t4otl")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_j2b1d")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_cs1tg")
+}],
+"loop": 1,
+"name": &"run",
+"speed": 7.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("15_2dvfe")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16_giy8y")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17_fdfoy")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18_hhpqf")
+}, {
+"duration": 1.0,
+"texture": ExtResource("19_g5jhy")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20_holxr")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21_mx1m4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("22_4gjji")
+}, {
+"duration": 1.0,
+"texture": ExtResource("23_u2ulf")
+}],
+"loop": 0,
+"name": &"slash_air",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("24_6e8lb")
+}],
+"loop": 1,
+"name": &"turn",
+"speed": 1.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("25_2gdjj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("26_sc3ue")
+}, {
+"duration": 1.0,
+"texture": ExtResource("27_lxlsd")
+}],
+"loop": 1,
+"name": &"up",
+"speed": 5.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_nfrx5"]
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_pf23h"]
+a = Vector2(36, 112)
+b = Vector2(-284, 114)
+
+[node name="Player" type="Node2D" unique_id=82887042]
+
+[node name="CharacterBody2D" type="CharacterBody2D" parent="." unique_id=2039679148]
+visibility_layer = 2
+position = Vector2(53, 282)
+script = SubResource("GDScript_0hvcy")
+
+[node name="sprite" type="AnimatedSprite2D" parent="CharacterBody2D" unique_id=1375199637]
+scale = Vector2(3, 3)
+sprite_frames = SubResource("SpriteFrames_nfrx5")
+animation = &"slash_air"
+metadata/slashing = false
+
+[node name="collision" type="CollisionShape2D" parent="CharacterBody2D" unique_id=1303689072]
+scale = Vector2(6, 6)
+shape = SubResource("CircleShape2D_nfrx5")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=899471301]
+z_index = -1
+position = Vector2(1, -127)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=1764176475]
+position = Vector2(283, 356)
+shape = SubResource("SegmentShape2D_pf23h")
+
+[node name="Sprite2D" type="Sprite2D" parent="StaticBody2D" unique_id=513456898]
+position = Vector2(159, 467)
+texture = ExtResource("28_pf23h")
+
+[connection signal="animation_finished" from="CharacterBody2D/sprite" to="CharacterBody2D" method="_on_sprite_animation_finished"]
+[connection signal="frame_changed" from="CharacterBody2D/sprite" to="CharacterBody2D" method="_on_sprite_frame_changed"]
