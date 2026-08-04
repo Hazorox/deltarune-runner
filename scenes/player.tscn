@@ -27,7 +27,6 @@
 [ext_resource type="Texture2D" uid="uid://cyxu06kx3gu1p" path="res://assets/platformer/kris_up_1.png" id="25_2gdjj"]
 [ext_resource type="Texture2D" uid="uid://yvg3w54nv3do" path="res://assets/platformer/kris_up_2.png" id="26_sc3ue"]
 [ext_resource type="Texture2D" uid="uid://bimv5nj0u7oax" path="res://assets/platformer/kris_up_3.png" id="27_lxlsd"]
-[ext_resource type="Texture2D" uid="uid://dcbhpvwry55wj" path="res://assets/spr_sunrise_flowerlayer_dark_0.png" id="28_pf23h"]
 
 [sub_resource type="GDScript" id="GDScript_0hvcy"]
 resource_name = "player script"
@@ -132,11 +131,6 @@ animations = [{
 "name": &"land",
 "speed": 2.0
 }, {
-"frames": [],
-"loop": 1,
-"name": &"new_animation",
-"speed": 5.0
-}, {
 "frames": [{
 "duration": 1.0,
 "texture": ExtResource("9_bj30b")
@@ -217,38 +211,22 @@ animations = [{
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_nfrx5"]
 
-[sub_resource type="SegmentShape2D" id="SegmentShape2D_pf23h"]
-a = Vector2(36, 112)
-b = Vector2(-284, 114)
-
 [node name="Player" type="Node2D" unique_id=82887042]
 
 [node name="CharacterBody2D" type="CharacterBody2D" parent="." unique_id=2039679148]
 visibility_layer = 2
-position = Vector2(53, 282)
 script = SubResource("GDScript_0hvcy")
 
 [node name="sprite" type="AnimatedSprite2D" parent="CharacterBody2D" unique_id=1375199637]
-scale = Vector2(3, 3)
+scale = Vector2(2.75, 2.75)
 sprite_frames = SubResource("SpriteFrames_nfrx5")
-animation = &"slash_air"
+animation = &"down"
 metadata/slashing = false
 
 [node name="collision" type="CollisionShape2D" parent="CharacterBody2D" unique_id=1303689072]
-scale = Vector2(6, 6)
+position = Vector2(9, 0)
+scale = Vector2(5.75, 5.75)
 shape = SubResource("CircleShape2D_nfrx5")
-
-[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=899471301]
-z_index = -1
-position = Vector2(1, -127)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=1764176475]
-position = Vector2(283, 356)
-shape = SubResource("SegmentShape2D_pf23h")
-
-[node name="Sprite2D" type="Sprite2D" parent="StaticBody2D" unique_id=513456898]
-position = Vector2(159, 467)
-texture = ExtResource("28_pf23h")
 
 [connection signal="animation_finished" from="CharacterBody2D/sprite" to="CharacterBody2D" method="_on_sprite_animation_finished"]
 [connection signal="frame_changed" from="CharacterBody2D/sprite" to="CharacterBody2D" method="_on_sprite_frame_changed"]
