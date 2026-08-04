@@ -38,7 +38,7 @@ const JUMP_VELOCITY = -600.0
 
 @onready var sprite = $sprite
 @onready var collision = $collision
-
+@onready var collision_slash = $collision_slash
 
 
 func _physics_process(delta: float) -> void:
@@ -79,11 +79,12 @@ func _physics_process(delta: float) -> void:
 
 # Auto-configure for the collision size ( due to differences between each frameGroup )
 func _on_sprite_frame_changed()->void:
-	if sprite.animation == \"slash_air\":
-		collision.shape.radius=16
+	if sprite.animation == \"slash_air\" and (sprite.frame ==1 or sprite.frame==2):
+		collision_slash.disabled = false
+		collision.disabled=true
 	else:
-		collision.shape.radius=10
-
+		collision.disabled=false
+		collision_slash.disabled=true
 
 func _on_sprite_animation_finished() -> void:
 	if sprite.animation == \"slash_air\":
@@ -184,13 +185,13 @@ animations = [{
 }],
 "loop": 0,
 "name": &"slash_air",
-"speed": 10.0
+"speed": 13.5
 }, {
 "frames": [{
 "duration": 1.0,
 "texture": ExtResource("24_6e8lb")
 }],
-"loop": 1,
+"loop": 0,
 "name": &"turn",
 "speed": 1.0
 }, {
@@ -220,13 +221,20 @@ script = SubResource("GDScript_0hvcy")
 [node name="sprite" type="AnimatedSprite2D" parent="CharacterBody2D" unique_id=1375199637]
 scale = Vector2(2.75, 2.75)
 sprite_frames = SubResource("SpriteFrames_nfrx5")
-animation = &"down"
+animation = &"slash_air"
+frame = 8
+frame_progress = 1.0
 metadata/slashing = false
 
 [node name="collision" type="CollisionShape2D" parent="CharacterBody2D" unique_id=1303689072]
 position = Vector2(9, 0)
 scale = Vector2(5.75, 5.75)
 shape = SubResource("CircleShape2D_nfrx5")
+
+[node name="collision_slash" type="CollisionPolygon2D" parent="CharacterBody2D" unique_id=461372008]
+build_mode = 1
+polygon = PackedVector2Array(-40, 32, -49, -38, 13, -103, 78, -92, 111, -46, 117, 11, 81, 42, 30, 63)
+disabled = true
 
 [connection signal="animation_finished" from="CharacterBody2D/sprite" to="CharacterBody2D" method="_on_sprite_animation_finished"]
 [connection signal="frame_changed" from="CharacterBody2D/sprite" to="CharacterBody2D" method="_on_sprite_frame_changed"]
