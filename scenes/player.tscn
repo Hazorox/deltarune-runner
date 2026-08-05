@@ -20,9 +20,6 @@
 [ext_resource type="Texture2D" uid="uid://cgv7g2j3gyi68" path="res://assets/platformer/slash_air/12.png" id="18_hhpqf"]
 [ext_resource type="Texture2D" uid="uid://ceyrer543ga08" path="res://assets/platformer/slash_air/13.png" id="19_g5jhy"]
 [ext_resource type="Texture2D" uid="uid://dwl46frq08v4a" path="res://assets/platformer/slash_air/14.png" id="20_holxr"]
-[ext_resource type="Texture2D" uid="uid://d2vhh00maxg5c" path="res://assets/platformer/slash_air/15.png" id="21_mx1m4"]
-[ext_resource type="Texture2D" uid="uid://7hgwj5wex41q" path="res://assets/platformer/slash_air/16.png" id="22_4gjji"]
-[ext_resource type="Texture2D" uid="uid://cuno47nqpfdoe" path="res://assets/platformer/slash_air/17.png" id="23_u2ulf"]
 [ext_resource type="Texture2D" uid="uid://ivk46fnwkuyb" path="res://assets/platformer/spr_kris_plat_turn_0.png" id="24_6e8lb"]
 [ext_resource type="Texture2D" uid="uid://cyxu06kx3gu1p" path="res://assets/platformer/kris_up_1.png" id="25_2gdjj"]
 [ext_resource type="Texture2D" uid="uid://yvg3w54nv3do" path="res://assets/platformer/kris_up_2.png" id="26_sc3ue"]
@@ -34,39 +31,41 @@ script/source = "extends CharacterBody2D
 
 
 const SPEED = 350.0
-const JUMP_VELOCITY = -600.0
-
+const JUMP_VELOCITY = -650.0
+var launch_lock: bool = false
+var launch_lock_time: float = 0.25
 @onready var sprite = $sprite
 @onready var collision = $collision
-@onready var collision_slash = $collision_slash
-
-
+func _ready()->void:
+	game.player=self
 func _physics_process(delta: float) -> void:
-	if Input.is_action_just_pressed(\"accept\") and not sprite.get_meta(\"slashing\", false) and not is_on_floor():
-		sprite.set_meta(\"slashing\", true)
+	if Input.is_action_just_pressed(\"accept\") and not get_meta(\"slashing\", false) and not is_on_floor():
+		set_meta(\"slashing\", true)
 		sprite.play(\"slash_air\")
+		for flower in get_tree().get_nodes_in_group(\"flower\"):
+			if flower.inside == self:
+				flower.attempt_launch()
 	# Add the gravity.
 	if not is_on_floor():
 		velocity += get_gravity() * delta
 	# Handle jump.
 	if Input.is_action_just_pressed(\"jump\") and is_on_floor():
 		velocity.y = JUMP_VELOCITY
-	# Get the input direction and handle the movement/deceleration.
-	# As good practice, you should replace UI actions with custom gameplay actions.
 	var direction := Input.get_axis(\"left\", \"right\")
 	
 	# Flip direction
-	if direction:
-		if direction==1.0:
-			sprite.flip_h=false
-		elif direction==-1.0:
-			sprite.flip_h=true
-		velocity.x = direction * SPEED
-	else:
-		velocity.x = move_toward(velocity.x, 0, SPEED)
+	if not launch_lock:
+		if direction:
+			if direction==1.0:
+				sprite.flip_h=false
+			elif direction==-1.0:
+				sprite.flip_h=true
+			velocity.x = direction * SPEED
+		else:
+			velocity.x = move_toward(velocity.x, 0, SPEED)
 	
 	# Change frames
-	if not sprite.get_meta(\"slashing\",false):
+	if not get_meta(\"slashing\",false):
 		if velocity.y>0:
 			sprite.play(\"down\")
 		elif velocity.y<0:
@@ -77,18 +76,15 @@ func _physics_process(delta: float) -> void:
 			sprite.play(\"idle\")
 	move_and_slide()
 
-# Auto-configure for the collision size ( due to differences between each frameGroup )
-func _on_sprite_frame_changed()->void:
-	if sprite.animation == \"slash_air\" and (sprite.frame ==1 or sprite.frame==2):
-		collision_slash.disabled = false
-		collision.disabled=true
-	else:
-		collision.disabled=false
-		collision_slash.disabled=true
-
 func _on_sprite_animation_finished() -> void:
 	if sprite.animation == \"slash_air\":
-		sprite.set_meta(\"slashing\",false)
+		set_meta(\"slashing\",false)
+
+func apply_launch(vel: Vector2) -> void:
+	velocity = vel
+	launch_lock = true
+	get_tree().create_timer(launch_lock_time).timeout.connect(func(): launch_lock = false)
+	return
 "
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_nfrx5"]
@@ -173,19 +169,10 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": ExtResource("20_holxr")
-}, {
-"duration": 1.0,
-"texture": ExtResource("21_mx1m4")
-}, {
-"duration": 1.0,
-"texture": ExtResource("22_4gjji")
-}, {
-"duration": 1.0,
-"texture": ExtResource("23_u2ulf")
 }],
 "loop": 0,
 "name": &"slash_air",
-"speed": 13.5
+"speed": 16.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -211,30 +198,29 @@ animations = [{
 }]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_nfrx5"]
+radius = 9.0
 
 [node name="Player" type="Node2D" unique_id=82887042]
 
-[node name="CharacterBody2D" type="CharacterBody2D" parent="." unique_id=2039679148]
-visibility_layer = 2
+[node name="CharacterBody2D" type="CharacterBody2D" parent="." unique_id=2039679148 groups=["player"]]
+visibility_layer = 4
 script = SubResource("GDScript_0hvcy")
-
-[node name="sprite" type="AnimatedSprite2D" parent="CharacterBody2D" unique_id=1375199637]
-scale = Vector2(2.75, 2.75)
-sprite_frames = SubResource("SpriteFrames_nfrx5")
-animation = &"slash_air"
-frame = 8
-frame_progress = 1.0
 metadata/slashing = false
 
+[node name="sprite" type="AnimatedSprite2D" parent="CharacterBody2D" unique_id=1375199637]
+scale = Vector2(2.25, 2.25)
+sprite_frames = SubResource("SpriteFrames_nfrx5")
+animation = &"slash_air"
+
 [node name="collision" type="CollisionShape2D" parent="CharacterBody2D" unique_id=1303689072]
-position = Vector2(9, 0)
-scale = Vector2(5.75, 5.75)
+position = Vector2(4, 0)
+scale = Vector2(5, 5)
 shape = SubResource("CircleShape2D_nfrx5")
 
-[node name="collision_slash" type="CollisionPolygon2D" parent="CharacterBody2D" unique_id=461372008]
-build_mode = 1
-polygon = PackedVector2Array(-40, 32, -49, -38, 13, -103, 78, -92, 111, -46, 117, 11, 81, 42, 30, 63)
-disabled = true
+[node name="player_cam" type="Camera2D" parent="CharacterBody2D" unique_id=6898736]
+limit_left = 0
+limit_right = 640
+limit_bottom = 480
 
 [connection signal="animation_finished" from="CharacterBody2D/sprite" to="CharacterBody2D" method="_on_sprite_animation_finished"]
 [connection signal="frame_changed" from="CharacterBody2D/sprite" to="CharacterBody2D" method="_on_sprite_frame_changed"]
