@@ -19,7 +19,7 @@ config/icon="res://assets/icon.svg"
 
 [autoload]
 
-Autoload="*uid://bi3wfbyo1dsib"
+game="*uid://bi3wfbyo1dsib"
 
 [display]
 
@@ -37,10 +37,11 @@ enabled=PackedStringArray("res://addons/godot_super-wakatime/plugin.cfg")
 [global_group]
 
 player=""
+flower=""
 
 [gui]
 
-theme/custom_font="uid://dvqo58kxybmht"
+theme/custom_font="uid://csybb4o6y1ou7"
 
 [input]
 
