@@ -1,0 +1,183 @@
+[gd_scene format=3 uid="uid://bb4exmpotts5f"]
+
+[ext_resource type="PackedScene" uid="uid://begdy721mu54m" path="res://scenes/player.tscn" id="1_6n4rw"]
+[ext_resource type="Texture2D" uid="uid://bu8uxcpkljgpm" path="res://assets/tower_wall.png" id="2_dy1r5"]
+[ext_resource type="Texture2D" uid="uid://oiv8r0smle2" path="res://assets/tower_bg.png" id="3_mijff"]
+[ext_resource type="Texture2D" uid="uid://dybf8002kpg54" path="res://assets/tower_floor.png" id="4_6y447"]
+[ext_resource type="Texture2D" uid="uid://drtl2fx0j763c" path="res://assets/slash_pusher/Slash Pusher/spr_plat_slashpusher_petals_yellow_0.png" id="5_6y447"]
+[ext_resource type="Texture2D" uid="uid://dx7qdkd0o34ed" path="res://assets/slash_pusher/Slash Pusher/spr_plat_slashpusher_petals_yellow_1.png" id="6_gqbp3"]
+[ext_resource type="Texture2D" uid="uid://bk4wx3f5ubcmu" path="res://assets/slash_pusher/Slash Pusher/spr_plat_slashpusher_petals_yellow_2.png" id="7_o13iq"]
+
+[sub_resource type="GDScript" id="GDScript_6y447"]
+resource_name = "flower"
+script/source = "extends Area2D
+@onready var launch_speed = 667
+@onready var cooldown = 0.35
+@onready var flower_sprite = $AnimatedSprite2D
+@onready var score = $\"../canvas/score\"
+var can_slash = true
+var inside:Node2D = null
+var was_above = false
+func _process(_delta:float)->void:
+	print(game.player)
+	if game.player!=null:
+		print(game.player.global_position,'====',global_position)
+		if game.player.global_position.y>global_position.y and was_above:
+			game.tower_score-=1
+			was_above=false
+		if game.player.global_position.y < global_position.y and not was_above :
+			game.tower_score+=1
+			was_above=true
+		
+func launch_player(player: Node2D) -> void:
+	can_slash = false
+	flower_sprite.play(\"hit\")
+	var raw_direction = (player.global_position - global_position).normalized()
+	var snapped_direction = snap_dir(raw_direction)
+	player.apply_launch(snapped_direction * launch_speed)
+	await get_tree().create_timer(cooldown).timeout
+	can_slash = true
+
+func snap_dir(dir: Vector2) -> Vector2:
+	var angle = dir.angle()
+	var snapped_angle = round(angle / (PI / 4.0)) * (PI / 4.0)
+	return Vector2(cos(snapped_angle), sin(snapped_angle))
+
+func attempt_launch()->void:
+	if not can_slash or inside == null:
+		return
+	launch_player(inside)
+func _on_body_entered(body: Node2D) -> void:
+	if body.is_in_group(\"player\"):
+		inside=body
+
+func _on_body_exited(body: Node2D) -> void:
+	if body == inside:
+		inside=null
+"
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_gqbp3"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6_gqbp3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_o13iq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_gqbp3")
+}],
+"loop": 0,
+"name": &"hit",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("5_6y447")
+}],
+"loop": 1,
+"name": &"idle",
+"speed": 5.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_nfrx5"]
+radius = 30.0
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_nfrx5"]
+a = Vector2(-218, -418)
+b = Vector2(-218, 62)
+
+[sub_resource type="SystemFont" id="SystemFont_6y447"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_ml1b6"]
+font = SubResource("SystemFont_6y447")
+font_size = 20
+
+[sub_resource type="GDScript" id="GDScript_gqbp3"]
+script/source = "extends Label
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta: float) -> void:
+	text = str(game.tower_score)
+"
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_0hvcy"]
+a = Vector2(33, 365)
+b = Vector2(495, 365)
+
+[node name="Tower" type="Node2D" unique_id=8476896]
+
+[node name="flower1" type="Area2D" parent="." unique_id=1130758151 groups=["flower"]]
+visibility_layer = 3
+position = Vector2(205.99997, 212.99997)
+scale = Vector2(2.5, 2.5)
+script = SubResource("GDScript_6y447")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="flower1" unique_id=505308699]
+sprite_frames = SubResource("SpriteFrames_gqbp3")
+animation = &"hit"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="flower1" unique_id=1941552211]
+visibility_layer = 4
+shape = SubResource("CircleShape2D_nfrx5")
+
+[node name="player" parent="." unique_id=82887042 groups=["player"] instance=ExtResource("1_6n4rw")]
+position = Vector2(308, 334)
+
+[node name="wall1" type="StaticBody2D" parent="." unique_id=1429129621]
+position = Vector2(480, 418)
+
+[node name="Sprite2D2" type="Sprite2D" parent="wall1" unique_id=213171004]
+position = Vector2(-480, -198)
+texture = ExtResource("2_dy1r5")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="wall1" unique_id=733173782]
+position = Vector2(-177, 0)
+shape = SubResource("SegmentShape2D_nfrx5")
+
+[node name="wall2" type="StaticBody2D" parent="." unique_id=949344421]
+position = Vector2(308, 418)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="wall2" unique_id=869661266]
+position = Vector2(467, 0)
+shape = SubResource("SegmentShape2D_nfrx5")
+
+[node name="Sprite2D" type="Sprite2D" parent="wall2" unique_id=13341145]
+position = Vector2(332, -198)
+texture = ExtResource("2_dy1r5")
+
+[node name="canvas" type="CanvasLayer" parent="." unique_id=870472356]
+layer = -1
+
+[node name="TextureRect" type="TextureRect" parent="canvas" unique_id=1260003386]
+z_index = -1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_mijff")
+metadata/_edit_lock_ = true
+
+[node name="score" type="Label" parent="canvas" unique_id=1470143937]
+offset_left = 94.0
+offset_right = 169.0
+offset_bottom = 41.0
+label_settings = SubResource("LabelSettings_ml1b6")
+script = SubResource("GDScript_gqbp3")
+
+[node name="floor" type="StaticBody2D" parent="." unique_id=1370850613]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="floor" unique_id=915317775]
+position = Vector2(55, 26)
+shape = SubResource("SegmentShape2D_0hvcy")
+
+[node name="Sprite2D" type="Sprite2D" parent="floor" unique_id=815006540]
+position = Vector2(319, 379)
+scale = Vector2(1.925, 1)
+texture = ExtResource("4_6y447")
+
+[connection signal="body_entered" from="flower1" to="flower1" method="_on_body_entered"]
+[connection signal="body_exited" from="flower1" to="flower1" method="_on_body_exited"]
