@@ -200,27 +200,27 @@ animations = [{
 [sub_resource type="CircleShape2D" id="CircleShape2D_nfrx5"]
 radius = 9.0
 
-[node name="Player" type="Node2D" unique_id=82887042]
-
-[node name="CharacterBody2D" type="CharacterBody2D" parent="." unique_id=2039679148 groups=["player"]]
+[node name="CharacterBody2D" type="CharacterBody2D" unique_id=2039679148 groups=["player"]]
 visibility_layer = 4
 script = SubResource("GDScript_0hvcy")
 metadata/slashing = false
 
-[node name="sprite" type="AnimatedSprite2D" parent="CharacterBody2D" unique_id=1375199637]
+[node name="sprite" type="AnimatedSprite2D" parent="." unique_id=1375199637]
 scale = Vector2(2.25, 2.25)
 sprite_frames = SubResource("SpriteFrames_nfrx5")
 animation = &"slash_air"
 
-[node name="collision" type="CollisionShape2D" parent="CharacterBody2D" unique_id=1303689072]
+[node name="collision" type="CollisionShape2D" parent="." unique_id=1303689072]
 position = Vector2(4, 0)
 scale = Vector2(5, 5)
 shape = SubResource("CircleShape2D_nfrx5")
 
-[node name="player_cam" type="Camera2D" parent="CharacterBody2D" unique_id=6898736]
+[node name="player_cam" type="Camera2D" parent="." unique_id=6898736]
 limit_left = 0
 limit_right = 640
 limit_bottom = 480
 
-[connection signal="animation_finished" from="CharacterBody2D/sprite" to="CharacterBody2D" method="_on_sprite_animation_finished"]
-[connection signal="frame_changed" from="CharacterBody2D/sprite" to="CharacterBody2D" method="_on_sprite_frame_changed"]
+[node name="Player" type="Node2D" parent="." unique_id=82887042]
+
+[connection signal="animation_finished" from="sprite" to="." method="_on_sprite_animation_finished"]
+[connection signal="frame_changed" from="sprite" to="." method="_on_sprite_frame_changed"]
