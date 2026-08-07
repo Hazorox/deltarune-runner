@@ -2,9 +2,14 @@ extends Node
 @onready var fullscreen:bool=false
 @onready var tower_score:int = 0
 @onready var tower_hi:int = 0
+@onready var mode = null
+@onready var difficulty:int = 2
+@onready var paused:bool = false
 var player:Node2D = null
-
+func _ready() -> void:
+	process_mode=Node.PROCESS_MODE_ALWAYS
 func _process(delta: float) -> void:
+	print(tower_score,tower_hi)
 	# Listen for full screen
 	if Input.is_action_just_pressed("fullscreen"):
 		# Toggle Based on Boolean
@@ -16,4 +21,9 @@ func _process(delta: float) -> void:
 			fullscreen=true
 	# Listen for Exit
 	elif Input.is_action_just_pressed("exit"):
-		get_tree().change_scene_to_file("res://scenes/menu.tscn")
+		if game.paused:
+			get_tree().paused=false
+			game.paused=false
+		else:
+			get_tree().paused = true
+			game.paused=true
