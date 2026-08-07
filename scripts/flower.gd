@@ -1,5 +1,5 @@
 extends Area2D
-@onready var launch_speed = 800
+@onready var launch_speed = 767 # Im brain rotted, HELP
 @onready var cooldown = 0.35
 @onready var flower_sprite = $AnimatedSprite2D
 var can_slash = true
