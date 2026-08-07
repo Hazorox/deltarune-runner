@@ -3,13 +3,13 @@ extends Node
 @onready var tower_score:int = 0
 @onready var tower_hi:int = 0
 @onready var mode = null
-@onready var difficulty:int = 2
+enum difficulties {easy,normal,hard}
+@onready var difficulty = difficulties.easy
 @onready var paused:bool = false
 var player:Node2D = null
 func _ready() -> void:
 	process_mode=Node.PROCESS_MODE_ALWAYS
 func _process(delta: float) -> void:
-	print(tower_score,tower_hi)
 	# Listen for full screen
 	if Input.is_action_just_pressed("fullscreen"):
 		# Toggle Based on Boolean
