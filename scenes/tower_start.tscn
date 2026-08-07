@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://bb4exmpotts5f"]
 
 [ext_resource type="PackedScene" uid="uid://begdy721mu54m" path="res://scenes/player.tscn" id="1_6n4rw"]
-[ext_resource type="PackedScene" uid="uid://d0wotnwnms153" path="res://scenes/towerHUD.tscn" id="1_dube2"]
+[ext_resource type="PackedScene" uid="uid://d0wotnwnms153" path="res://scenes/HUD.tscn" id="1_dube2"]
 [ext_resource type="Script" uid="uid://bka34r47b71oe" path="res://scripts/flower.gd" id="1_gqbp3"]
 [ext_resource type="Texture2D" uid="uid://bu8uxcpkljgpm" path="res://assets/tower_wall.png" id="2_dy1r5"]
 [ext_resource type="Texture2D" uid="uid://oiv8r0smle2" path="res://assets/tower_bg.png" id="3_mijff"]
