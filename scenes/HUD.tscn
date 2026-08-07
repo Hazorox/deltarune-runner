@@ -1,0 +1,199 @@
+[gd_scene format=3 uid="uid://d0wotnwnms153"]
+
+[ext_resource type="FontFile" uid="uid://csybb4o6y1ou7" path="res://assets/main_font.otf" id="1_0oo48"]
+
+[sub_resource type="GDScript" id="GDScript_qpvh6"]
+resource_name = "HUDScript"
+script/source = "extends CanvasLayer
+@onready var esc_menu = $escMenu
+
+func _ready()->void:
+	process_mode=Node.PROCESS_MODE_ALWAYS
+
+func _process(_delta: float) -> void:
+	if game.mode == null:
+		return
+	if game.paused:
+		esc_menu.visible=true
+	else:
+		if esc_menu.visible:
+			esc_menu.visible=false
+"
+
+[sub_resource type="LabelSettings" id="LabelSettings_xlq6p"]
+font = ExtResource("1_0oo48")
+
+[sub_resource type="GDScript" id="GDScript_nt7q6"]
+script/source = "extends Label
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta: float) -> void:
+	if not game.mode:
+		return
+	if game.mode == \"tower\":
+		text = \"Current Score : \" + str(game.tower_score)+\"\\n\" + \"HI Score : \" +str(game.tower_hi)
+	
+"
+
+[sub_resource type="GDScript" id="GDScript_1etfg"]
+resource_name = "menu_buttons"
+script/source = "extends VBoxContainer
+
+@onready var btn1 = $continue
+@onready var btn2 = $leave
+@onready var next = \"btn2\"
+
+func _ready()->void:
+	process_mode=Node.PROCESS_MODE_ALWAYS
+	if btn1:
+		btn1.grab_focus()
+func _process(delta: float) -> void:
+	if Input.is_action_just_pressed(\"down\") or Input.is_action_just_pressed(\"up\"):
+		if next==\"none\":
+			btn1.grab_focus()
+			next=\"btn2\"
+		elif next==\"btn1\":
+			btn1.grab_focus()
+			next=\"btn2\"
+		else:
+			btn2.grab_focus()
+			next=\"btn1\"
+
+func _on_leave_pressed() -> void:
+	get_tree().paused=false
+	game.paused=false
+	game.mode=null
+	get_tree().change_scene_to_file(\"res://scenes/menu.tscn\")
+
+func _on_continue_pressed() -> void:
+	game.paused=false
+	get_tree().paused=false
+"
+
+[sub_resource type="SystemFont" id="SystemFont_nfrx5"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7hsmw"]
+bg_color = Color(0.72, 0.38520002, 0.07200002, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+corner_detail = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qpvh6"]
+bg_color = Color(0.72, 0.47820005, 0.25200003, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+corner_detail = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8cuoo"]
+bg_color = Color(0.72, 0.441, 0.18, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+corner_detail = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cf6ij"]
+bg_color = Color(0.72, 0.441, 0.18, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+corner_detail = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_twldb"]
+bg_color = Color(0.73333335, 0.2, 0.22745098, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+corner_detail = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nysna"]
+bg_color = Color(0.73, 0.4088, 0.42486006, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+corner_detail = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_f6qnu"]
+bg_color = Color(0.73, 0.292, 0.31390005, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+corner_detail = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_k4w17"]
+bg_color = Color(0.73, 0.292, 0.31390005, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+corner_detail = 1
+
+[node name="Ui" type="CanvasLayer" unique_id=694030044]
+script = SubResource("GDScript_qpvh6")
+
+[node name="score" type="Label" parent="." unique_id=2047538883]
+offset_left = 90.0
+offset_right = 165.0
+offset_bottom = 41.0
+label_settings = SubResource("LabelSettings_xlq6p")
+script = SubResource("GDScript_nt7q6")
+
+[node name="escMenu" type="CanvasLayer" parent="." unique_id=509753019]
+visible = false
+
+[node name="bg" type="ColorRect" parent="escMenu" unique_id=1665678529]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.5019608)
+
+[node name="buttons" type="VBoxContainer" parent="escMenu" unique_id=432033251]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -100.0
+offset_top = -65.0
+offset_right = 100.0
+offset_bottom = 90.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 25
+script = SubResource("GDScript_1etfg")
+
+[node name="continue" type="Button" parent="escMenu/buttons" unique_id=773380250]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_fonts/font = SubResource("SystemFont_nfrx5")
+theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxFlat_7hsmw")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_qpvh6")
+theme_override_styles/hover = SubResource("StyleBoxFlat_8cuoo")
+theme_override_styles/focus = SubResource("StyleBoxFlat_cf6ij")
+text = "Continue"
+
+[node name="leave" type="Button" parent="escMenu/buttons" unique_id=2058636585]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_fonts/font = SubResource("SystemFont_nfrx5")
+theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxFlat_twldb")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_nysna")
+theme_override_styles/hover = SubResource("StyleBoxFlat_f6qnu")
+theme_override_styles/focus = SubResource("StyleBoxFlat_k4w17")
+text = "Leave"
+
+[connection signal="pressed" from="escMenu/buttons/continue" to="escMenu/buttons" method="_on_continue_pressed"]
+[connection signal="pressed" from="escMenu/buttons/leave" to="escMenu/buttons" method="_on_leave_pressed"]
