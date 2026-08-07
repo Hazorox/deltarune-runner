@@ -1,0 +1,29 @@
+[gd_resource type="SpriteFrames" format=3 uid="uid://8lck2jwytgbp"]
+
+[ext_resource type="Texture2D" uid="uid://dx7qdkd0o34ed" path="res://assets/slash_pusher/Slash Pusher/spr_plat_slashpusher_petals_yellow_1.png" id="1_j8jts"]
+[ext_resource type="Texture2D" uid="uid://bk4wx3f5ubcmu" path="res://assets/slash_pusher/Slash Pusher/spr_plat_slashpusher_petals_yellow_2.png" id="2_myat4"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_j8jts")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_myat4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("1_j8jts")
+}],
+"loop": 0,
+"name": &"hit",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_j8jts")
+}],
+"loop": 0,
+"name": &"idle",
+"speed": 5.0
+}]
