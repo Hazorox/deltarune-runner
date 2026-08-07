@@ -20,6 +20,7 @@ config/icon="res://assets/icon.svg"
 [autoload]
 
 game="*uid://bi3wfbyo1dsib"
+DiscordRPCLoader="*uid://bsfgxctyu75i6"
 
 [display]
 
@@ -27,12 +28,12 @@ window/size/viewport_width=640
 window/size/viewport_height=480
 window/size/resizable=false
 window/size/borderless=true
-window/stretch/mode="viewport"
+window/stretch/mode="canvas_items"
 window/vsync/vsync_mode=0
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/godot_super-wakatime/plugin.cfg")
+enabled=PackedStringArray("res://addons/discord-rpc-gd/plugin.cfg", "res://addons/godot_super-wakatime/plugin.cfg")
 
 [global_group]
 
