@@ -1,36 +1,8 @@
 [gd_scene format=3 uid="uid://dko2j60m7y7cw"]
 
-[ext_resource type="Texture2D" uid="uid://dx7qdkd0o34ed" path="res://assets/slash_pusher/Slash Pusher/spr_plat_slashpusher_petals_yellow_1.png" id="1_by010"]
 [ext_resource type="Script" uid="uid://bka34r47b71oe" path="res://scripts/flower.gd" id="1_dorfu"]
-[ext_resource type="Texture2D" uid="uid://bk4wx3f5ubcmu" path="res://assets/slash_pusher/Slash Pusher/spr_plat_slashpusher_petals_yellow_2.png" id="2_mclii"]
-[ext_resource type="Texture2D" uid="uid://drtl2fx0j763c" path="res://assets/slash_pusher/Slash Pusher/spr_plat_slashpusher_petals_yellow_0.png" id="3_dlrwy"]
 [ext_resource type="Texture2D" uid="uid://bu8uxcpkljgpm" path="res://assets/tower_wall.png" id="5_yg8ax"]
 [ext_resource type="Texture2D" uid="uid://oiv8r0smle2" path="res://assets/tower_bg.png" id="6_2scme"]
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_gqbp3"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": ExtResource("1_by010")
-}, {
-"duration": 1.0,
-"texture": ExtResource("2_mclii")
-}, {
-"duration": 1.0,
-"texture": ExtResource("1_by010")
-}],
-"loop": 0,
-"name": &"hit",
-"speed": 8.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": ExtResource("3_dlrwy")
-}],
-"loop": 1,
-"name": &"idle",
-"speed": 5.0
-}]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_nfrx5"]
 radius = 30.0
@@ -41,31 +13,29 @@ b = Vector2(-218, 62)
 
 [node name="Tower2" type="Node2D" unique_id=8476896]
 
-[node name="rightFlower" type="Area2D" parent="." unique_id=1130758151 groups=["flower"]]
+[node name="right" type="Area2D" parent="." unique_id=1130758151 groups=["flower"]]
 visibility_layer = 3
 position = Vector2(450, 147)
 scale = Vector2(2.5, 2.5)
 script = ExtResource("1_dorfu")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="rightFlower" unique_id=505308699]
-sprite_frames = SubResource("SpriteFrames_gqbp3")
-animation = &"hit"
+[node name="spriteFrames" type="AnimatedSprite2D" parent="right" unique_id=505308699]
+animation = &""
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="rightFlower" unique_id=1941552211]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="right" unique_id=1941552211]
 visibility_layer = 4
 shape = SubResource("CircleShape2D_nfrx5")
 
-[node name="leftFlower" type="Area2D" parent="." unique_id=1976031221 groups=["flower"]]
+[node name="left" type="Area2D" parent="." unique_id=1976031221 groups=["flower"]]
 visibility_layer = 3
 position = Vector2(190, 374)
 scale = Vector2(2.5, 2.5)
 script = ExtResource("1_dorfu")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="leftFlower" unique_id=567170986]
-sprite_frames = SubResource("SpriteFrames_gqbp3")
-animation = &"hit"
+[node name="spriteFrames" type="AnimatedSprite2D" parent="left" unique_id=567170986]
+animation = &""
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="leftFlower" unique_id=498152282]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="left" unique_id=498152282]
 visibility_layer = 4
 position = Vector2(0, 0.8000183)
 shape = SubResource("CircleShape2D_nfrx5")
@@ -105,7 +75,7 @@ grow_vertical = 2
 texture = ExtResource("6_2scme")
 metadata/_edit_lock_ = true
 
-[connection signal="body_entered" from="rightFlower" to="rightFlower" method="_on_body_entered"]
-[connection signal="body_exited" from="rightFlower" to="rightFlower" method="_on_body_exited"]
-[connection signal="body_entered" from="leftFlower" to="leftFlower" method="_on_body_entered"]
-[connection signal="body_exited" from="leftFlower" to="leftFlower" method="_on_body_exited"]
+[connection signal="body_entered" from="right" to="right" method="_on_body_entered"]
+[connection signal="body_exited" from="right" to="right" method="_on_body_exited"]
+[connection signal="body_entered" from="left" to="left" method="_on_body_entered"]
+[connection signal="body_exited" from="left" to="left" method="_on_body_exited"]
