@@ -25,9 +25,11 @@ func _process(delta: float) -> void:
 
 func _on_tower_pressed() -> void:
 	get_tree().change_scene_to_file(\"res://scenes/tower_start.tscn\")
+	game.mode=\"tower\"
 
 func _on_runner_pressed() -> void:
 	get_tree().change_scene_to_file(\"res://scenes/runner.tscn\")
+	game.mode=\"runner\"
 "
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bhm6m"]
