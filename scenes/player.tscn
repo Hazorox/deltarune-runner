@@ -172,7 +172,7 @@ animations = [{
 }],
 "loop": 0,
 "name": &"slash_air",
-"speed": 16.0
+"speed": 20.0
 }, {
 "frames": [{
 "duration": 1.0,
