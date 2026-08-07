@@ -8,7 +8,6 @@ var player: Node2D
 var highest_chunk_index: int = 0
 var peak_y: float = 0.0
 var spawned_chunks: Dictionary = {}
-
 func _ready() -> void:
 	# Import autoloaded player variable
 	player = game.player
