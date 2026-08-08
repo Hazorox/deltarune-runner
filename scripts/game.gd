@@ -3,10 +3,12 @@ extends Node
 @onready var tower_score:int = 0
 @onready var tower_hi:int = 0
 @onready var mode = null
+@onready var paused = false
+@onready var level_chosen:bool = false
 enum difficulties {easy,normal,hard}
 @onready var difficulty = difficulties.normal
-@onready var paused:bool = false
 var player:Node2D = null
+signal difficulty_chosen
 func _ready() -> void:
 	process_mode=Node.PROCESS_MODE_ALWAYS
 func _process(delta: float) -> void:
@@ -27,3 +29,10 @@ func _process(delta: float) -> void:
 		else:
 			get_tree().paused = true
 			game.paused=true
+func pause(idk:bool)->void:
+	if idk:
+		get_tree().paused = true
+		paused = true
+	else:
+		paused = false
+		get_tree().paused = false

@@ -6,13 +6,18 @@
 resource_name = "HUDScript"
 script/source = "extends CanvasLayer
 @onready var esc_menu = $escMenu
-
+@onready var level_choice = $\"level-chooser\"
 func _ready()->void:
 	process_mode=Node.PROCESS_MODE_ALWAYS
 
 func _process(_delta: float) -> void:
 	if game.mode == null:
 		return
+	if not game.level_chosen:
+		level_choice.visible=true
+	else:
+		if level_choice.visible:
+			level_choice.visible=false
 	if game.paused:
 		esc_menu.visible=true
 	else:
@@ -45,8 +50,7 @@ script/source = "extends VBoxContainer
 
 func _ready()->void:
 	process_mode=Node.PROCESS_MODE_ALWAYS
-	if btn1:
-		btn1.grab_focus()
+	btn1.grab_focus()
 func _process(delta: float) -> void:
 	if Input.is_action_just_pressed(\"down\") or Input.is_action_just_pressed(\"up\"):
 		if next==\"none\":
@@ -60,17 +64,18 @@ func _process(delta: float) -> void:
 			next=\"btn1\"
 
 func _on_leave_pressed() -> void:
-	get_tree().paused=false
-	game.paused=false
+	game.pause(false)
 	game.mode=null
+	game.difficulty = 1
+	game.level_chosen=false
 	get_tree().change_scene_to_file(\"res://scenes/menu.tscn\")
 
 func _on_continue_pressed() -> void:
-	game.paused=false
-	get_tree().paused=false
+	game.pause(false)
 "
 
 [sub_resource type="SystemFont" id="SystemFont_nfrx5"]
+subpixel_positioning = 0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7hsmw"]
 bg_color = Color(0.72, 0.38520002, 0.07200002, 1)
@@ -136,6 +141,47 @@ corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
 corner_detail = 1
 
+[sub_resource type="LabelSettings" id="LabelSettings_nfrx5"]
+font_size = 32
+
+[sub_resource type="GDScript" id="GDScript_0hvcy"]
+resource_name = "difficulty_chooser"
+script/source = "extends HBoxContainer
+@onready var easy = $easy
+@onready var normal = $normal
+@onready var hard = $hard
+@onready var buttons = [easy,normal,hard]
+enum difficulties {easy,normal,hard}
+var current = difficulties.normal
+func _ready()->void:
+	normal.grab_focus()
+
+func _process(delta: float) -> void:
+	if Input.is_action_just_pressed(\"right\"):
+			current = (current + 1) % buttons.size()
+			buttons[current].grab_focus()
+	elif Input.is_action_just_pressed(\"left\"):
+			current = (current - 1 + buttons.size()) % buttons.size()
+			buttons[current].grab_focus()
+
+func _on_easy_pressed() -> void:
+	game.difficulty = difficulties.easy
+	game.level_chosen = true
+	game.difficulty_chosen.emit()
+
+
+func _on_normal_pressed() -> void:
+	game.difficulty = difficulties.normal
+	game.level_chosen = true
+	game.difficulty_chosen.emit()
+	
+
+func _on_hard_pressed() -> void:
+	game.difficulty = difficulties.hard
+	game.level_chosen = true
+	game.difficulty_chosen.emit()
+"
+
 [node name="Ui" type="CanvasLayer" unique_id=694030044]
 script = SubResource("GDScript_qpvh6")
 
@@ -195,5 +241,57 @@ theme_override_styles/hover = SubResource("StyleBoxFlat_f6qnu")
 theme_override_styles/focus = SubResource("StyleBoxFlat_k4w17")
 text = "Leave"
 
+[node name="level-chooser" type="CanvasLayer" parent="." unique_id=806799759]
+visible = false
+
+[node name="bg2" type="ColorRect" parent="level-chooser" unique_id=1517097979]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.5019608)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="level-chooser" unique_id=1816159791]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -181.5
+offset_top = -55.0
+offset_right = 181.5
+offset_bottom = 55.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="level-chooser/VBoxContainer" unique_id=1910910985]
+layout_mode = 2
+text = "CHOOSE DIFFICULTY"
+label_settings = SubResource("LabelSettings_nfrx5")
+
+[node name="buttons" type="HBoxContainer" parent="level-chooser/VBoxContainer" unique_id=1086273516]
+layout_mode = 2
+script = SubResource("GDScript_0hvcy")
+
+[node name="easy" type="Button" parent="level-chooser/VBoxContainer/buttons" unique_id=373842188]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "EASY"
+
+[node name="normal" type="Button" parent="level-chooser/VBoxContainer/buttons" unique_id=1185655439]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "NORMAL"
+
+[node name="hard" type="Button" parent="level-chooser/VBoxContainer/buttons" unique_id=1165073883]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "HARD"
+
 [connection signal="pressed" from="escMenu/buttons/continue" to="escMenu/buttons" method="_on_continue_pressed"]
 [connection signal="pressed" from="escMenu/buttons/leave" to="escMenu/buttons" method="_on_leave_pressed"]
+[connection signal="pressed" from="level-chooser/VBoxContainer/buttons/easy" to="level-chooser/VBoxContainer/buttons" method="_on_easy_pressed"]
+[connection signal="pressed" from="level-chooser/VBoxContainer/buttons/normal" to="level-chooser/VBoxContainer/buttons" method="_on_normal_pressed"]
+[connection signal="pressed" from="level-chooser/VBoxContainer/buttons/hard" to="level-chooser/VBoxContainer/buttons" method="_on_hard_pressed"]
