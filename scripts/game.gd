@@ -4,7 +4,7 @@ extends Node
 @onready var tower_hi:int = 0
 @onready var mode = null
 enum difficulties {easy,normal,hard}
-@onready var difficulty = difficulties.easy
+@onready var difficulty = difficulties.normal
 @onready var paused:bool = false
 var player:Node2D = null
 func _ready() -> void:

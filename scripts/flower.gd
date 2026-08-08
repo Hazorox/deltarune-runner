@@ -1,11 +1,12 @@
 extends Area2D
 # Constants
-@onready var launch_speed:int
+@onready var launch_speed:int = 767
 @onready var cooldown = 0.35
 # Resources
 @onready var flower_sprite:AnimatedSprite2D = $spriteFrames
-@onready var directed_flower = preload("res://resources/pusher_directed.tres")
-@onready var auto_flower = preload("res://resources/pusher_auto.tres")
+@onready var collision_shape:CollisionShape2D = $CollisionShape2D
+var directed_flower = preload("res://resources/pusher_directed.tres")
+var auto_flower = preload("res://resources/pusher_auto.tres")
 # Score and slashing
 var can_slash = true
 var inside:Node2D = null
@@ -16,18 +17,16 @@ func _ready()->void:
 	match game.difficulty:
 		# EASY
 		0:
-			launch_speed = 700
+			launch_speed=1000
+			collision_shape.shape.radius = 25
 			flower_sprite.sprite_frames = directed_flower
 			match name:
 				"left":
+					global_position.x = 135
 					flower_sprite.animation = "idle_topright"
 				"right":
+					global_position.x=500
 					flower_sprite.animation = "idle_topleft"
-		# Normal
-		1:
-			launch_speed=767
-			flower_sprite.sprite_frames = auto_flower
-			flower_sprite.animation = "idle"
 
 # Update score based on player y
 func _process(_delta:float)->void:
@@ -42,7 +41,7 @@ func _process(_delta:float)->void:
 
 # Launch player on hit
 func launch_player(player: Node2D) -> void:
-	
+	var direction
 	# Put on cooldown
 	can_slash = false
 	
@@ -52,16 +51,18 @@ func launch_player(player: Node2D) -> void:
 			match name:
 				"left":
 					flower_sprite.play("hit_topright")
+					direction = Vector2(1,-1).normalized()
 				"right":
 					flower_sprite.play("hit_topleft")
+					direction = Vector2(-1,-1).normalized()
 		1:
 			flower_sprite.play("hit")
-	# Some vector idk
-	var raw_direction = (player.global_position - global_position).normalized()
-	var snapped_direction = snap_dir(raw_direction)
+			# Some vector idk
+			var raw_direction = (player.global_position - global_position).normalized()
+			direction = snap_dir(raw_direction)
 	
 	# LAUNCH THAT BAD BOY
-	player.apply_launch(snapped_direction * launch_speed)
+	player.apply_launch(direction * launch_speed)
 	
 	# Apply cooldown
 	await get_tree().create_timer(cooldown).timeout
