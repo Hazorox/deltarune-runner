@@ -14,6 +14,8 @@ var was_above = false
 
 # Initialize based on difficulty
 func _ready()->void:
+	if not game.level_chosen:
+		await game.difficulty_chosen
 	match game.difficulty:
 		# EASY
 		0:
