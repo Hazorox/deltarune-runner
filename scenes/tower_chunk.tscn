@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://dko2j60m7y7cw"]
 
 [ext_resource type="Script" uid="uid://bka34r47b71oe" path="res://scripts/flower.gd" id="1_dorfu"]
+[ext_resource type="SpriteFrames" uid="uid://8lck2jwytgbp" path="res://resources/pusher_auto.tres" id="2_0j0bq"]
 [ext_resource type="Texture2D" uid="uid://bu8uxcpkljgpm" path="res://assets/tower_wall.png" id="5_yg8ax"]
 [ext_resource type="Texture2D" uid="uid://oiv8r0smle2" path="res://assets/tower_bg.png" id="6_2scme"]
 
@@ -20,7 +21,8 @@ scale = Vector2(2.5, 2.5)
 script = ExtResource("1_dorfu")
 
 [node name="spriteFrames" type="AnimatedSprite2D" parent="right" unique_id=505308699]
-animation = &""
+sprite_frames = ExtResource("2_0j0bq")
+animation = &"idle"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="right" unique_id=1941552211]
 visibility_layer = 4
@@ -33,7 +35,8 @@ scale = Vector2(2.5, 2.5)
 script = ExtResource("1_dorfu")
 
 [node name="spriteFrames" type="AnimatedSprite2D" parent="left" unique_id=567170986]
-animation = &""
+sprite_frames = ExtResource("2_0j0bq")
+animation = &"idle"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="left" unique_id=498152282]
 visibility_layer = 4
