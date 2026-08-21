@@ -17,7 +17,14 @@ Well, I also did, so recreated it in my own game :D
 
 # Tower Mode
 An Infinite tower with different difficulties
+
+## Easy :
+The flowers launch the player in the direction of the arrow on them, just follow and get used !
 ![Easy difficulty tower mode](image.png)
+
+## Normal :
+The flowers launch the player in a direction based on the position targetted by the player's slash, deal along  :)
+
 ![Normal difficulty tower mode](image-1.png)
 
 <hr>
