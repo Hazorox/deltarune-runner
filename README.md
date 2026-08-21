@@ -12,6 +12,7 @@ Well, I also did, so recreated it in my own game :D
 - Slash : J, C
 - Movement : WASD or Arrows
 - Escape to Exit
+- F4 fullscreen
 
 <hr>
 
